@@ -1,6 +1,6 @@
 /* import { useContext } from 'react' */
 import { Link, useHistory } from 'react-router-dom'
-import { FormEvent, useState} from 'react' // pegar eventos de formulario
+import { FormEvent, useState} from 'react' 
 import ilustrationImg from '../assets/images/icons8-ask-fm.svg';
 import logoImg from '../assets/images/logo.svg';
 

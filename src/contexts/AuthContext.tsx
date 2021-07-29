@@ -1,17 +1,17 @@
-import { createContext, ReactNode, useState, useEffect  } from "react";  // disparo de efeitos colaterais 
+import { createContext, ReactNode, useState, useEffect  } from "react"; 
 import { auth, firebase } from "../services/firebase";
 
 
 
-type User = {  // qual o formato do usuario vou logar no estado
+type User = {  
     id: string;
     name: string;
     avatar: string;
     }
     
-type AuthContextType = { // criando tipagem, quais informações dentro do context 
+type AuthContextType = { 
     user: User | undefined;
-    signInWithGoogle: () => Promise<void>; // funcao sem retorno 
+    signInWithGoogle: () => Promise<void>; 
  }
  
 type AuthContextProviderProps = {
@@ -24,10 +24,9 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider(props: AuthContextProviderProps){
 
- const [user, setUser] = useState<User>();  // criando um estado (informação ) para mandar para contexto
-
+ const [user, setUser] = useState<User>();  
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => { // ouvindo o evento
+        const unsubscribe = auth.onAuthStateChanged(user => { 
           if (user){
             const { displayName, photoURL, uid} = user
     
@@ -52,16 +51,15 @@ export function AuthContextProvider(props: AuthContextProviderProps){
      async function signInWithGoogle(){  
         const provider = new firebase.auth.GoogleAuthProvider();
     
-         const result = await auth.signInWithPopup(provider);   // ele abre  o login do google como poup da tela
-    
-          if (result.user){ // se o usuario autenticado 100%  então
+         const result = await auth.signInWithPopup(provider);   
+          if (result.user){ 
               const {displayName, photoURL, uid} = result.user
     
-           if (!displayName || !photoURL) { // se o usuario nao tiver um nome ou uma foto vai disparar um error
+           if (!displayName || !photoURL) { 
               throw new Error('Missing information from Google Account');
             }
     
-            setUser({   // se ta logado certo, então preenche as informações do usuario
+            setUser({   
               id: uid,
               name: displayName,
               avatar: photoURL
