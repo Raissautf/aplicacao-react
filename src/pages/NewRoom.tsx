@@ -5,45 +5,31 @@ import ilustrationImg from '../assets/images/icons8-ask-fm.svg';
 import logoImg from '../assets/images/logo.svg';
 
 
-import  { Button } from '../components/Button';
+import { Button } from '../components/Button';
 import { database } from '../services/firebase';
 import { useAuth } from '../hooks/useAuth';
 
 import '../styles/auth.scss'
 
     
-
 export function NewRoom() {
-
-        
-
     const { user } = useAuth()
     const history = useHistory()
     const [newRoom, setNewRoom] = useState('');
 
+    async function handleCreateRoom(event: FormEvent) { 
+        event.preventDefault();
+        if(newRoom.trim() == '') {
+            return;
+        }
+        const roomRef = database.ref('rooms');
 
-async function handleCreateRoom(event: FormEvent) {
-    event.preventDefault();
-/* 
-    console.log(newRoom); */
-    
-
-  if(newRoom.trim() == '') {
-        return;
+        const firebaseRoom = await roomRef.push({
+            title: newRoom,
+            authorId: user?.id,
+        })
+        history.push(`/rooms/${firebaseRoom.key}`) 
     }
-
-    const roomRef = database.ref('rooms');
-
-    const firebaseRoom = await roomRef.push({
-        title: newRoom,
-        authorId: user?.id,
-    })
-
-    history.push(`/rooms/${firebaseRoom.key}`) 
-}
-    
-     //const { user } = useAuth();    
-
     return (
         <div id="page-auth">
             <aside>  
@@ -66,9 +52,9 @@ async function handleCreateRoom(event: FormEvent) {
                             Criar sala
                         </Button>
                     </form>
-                       <p>
-                         Quer entrar em uma sala existente <Link to="/">clique aqui</Link>
-                      </p>
+                    <p>
+                     Quer entrar em uma sala existente <Link to="/">clique aqui</Link>
+                    </p>
                 </div>
             </main>
         </div>
